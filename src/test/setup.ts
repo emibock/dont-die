@@ -1,6 +1,7 @@
 import { expect, afterEach } from 'vitest'
 import { cleanup } from '@testing-library/react'
 import * as matchers from 'vitest-axe/matchers'
+import 'fake-indexeddb/auto'
 
 // Extend Vitest's expect with vitest-axe matchers
 expect.extend(matchers)
