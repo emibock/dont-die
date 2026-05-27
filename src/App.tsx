@@ -5,6 +5,7 @@ import { TaskList } from './components/TaskList.tsx'
 import { GamificationBar } from './components/GamificationBar.tsx'
 import { ArchiveView } from './components/ArchiveView.tsx'
 import { ExportImport } from './components/ExportImport.tsx'
+import { DarkModeToggle } from './components/DarkModeToggle.tsx'
 
 function App() {
   const [isHydrated, setIsHydrated] = useState(false)
@@ -45,6 +46,7 @@ function App() {
 
   return (
     <div className="app">
+      <DarkModeToggle />
       <header className="app-header">
         <h1>Don't Die</h1>
         <p className="tagline">A gamified to-do list to keep your little guy from drowning in lava.</p>

@@ -46,21 +46,15 @@ describe('ExportImport', () => {
   })
 
   it('exports data when export button is clicked', async () => {
-    // Mock URL.createObjectURL and document methods
+    // Mock URL.createObjectURL and related methods
     const mockUrl = 'blob:mock-url'
     const createObjectURLSpy = vi.spyOn(URL, 'createObjectURL').mockReturnValue(mockUrl)
     const revokeObjectURLSpy = vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {})
 
-    // Mock createElement to track anchor creation
-    let clickCalled = false
-    const originalCreateElement = document.createElement.bind(document)
-    vi.spyOn(document, 'createElement').mockImplementation((tagName) => {
-      const element = originalCreateElement(tagName)
-      if (tagName === 'a') {
-        element.click = () => { clickCalled = true }
-      }
-      return element
-    })
+    // Mock HTMLAnchorElement.click
+    const originalClick = HTMLAnchorElement.prototype.click
+    const clickSpy = vi.fn()
+    HTMLAnchorElement.prototype.click = clickSpy
 
     // Add some test data
     await useTaskStore.getState().addTask({ content: 'Test task', parentId: null })
@@ -73,8 +67,11 @@ describe('ExportImport', () => {
     await user.click(exportButton)
 
     expect(createObjectURLSpy).toHaveBeenCalled()
-    expect(clickCalled).toBe(true)
+    expect(clickSpy).toHaveBeenCalled()
     expect(revokeObjectURLSpy).toHaveBeenCalledWith(mockUrl)
+
+    // Restore original click
+    HTMLAnchorElement.prototype.click = originalClick
   })
 
   it('triggers file input when import button is clicked', async () => {
