@@ -8,17 +8,30 @@ function App() {
   const [isHydrated, setIsHydrated] = useState(false)
   const hydrateTaskStore = useTaskStore(state => state.hydrate)
   const hydrateGameStore = useGameStore(state => state.hydrate)
+  const resetDay = useGameStore(state => state.resetDay)
 
+  // Hydrate stores on app load and check for new day
   useEffect(() => {
     const hydrate = async () => {
       await Promise.all([
         hydrateTaskStore(),
         hydrateGameStore(),
       ])
+      // Check for new day after hydration
+      await resetDay()
       setIsHydrated(true)
     }
     hydrate()
-  }, [hydrateTaskStore, hydrateGameStore])
+  }, [hydrateTaskStore, hydrateGameStore, resetDay])
+
+  // Check for new day on hourly interval
+  useEffect(() => {
+    const intervalId = setInterval(async () => {
+      await resetDay()
+    }, 60 * 60 * 1000) // 1 hour in milliseconds
+
+    return () => clearInterval(intervalId)
+  }, [resetDay])
 
   if (!isHydrated) {
     return (
