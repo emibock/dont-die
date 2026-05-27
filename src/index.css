@@ -190,6 +190,32 @@ button:disabled {
   background-color: rgba(239, 68, 68, 0.1);
 }
 
+/* Drag Handle */
+.drag-handle {
+  background: transparent;
+  color: var(--color-text);
+  padding: var(--spacing-xs);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: grab;
+  opacity: 0.3;
+  transition: opacity 0.2s;
+  border: none;
+  flex-shrink: 0;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.task-item:hover .drag-handle {
+  opacity: 0.6;
+}
+
+.drag-handle:hover {
+  opacity: 1 !important;
+}
+
 /* Subtask List */
 .subtask-list {
   margin-top: var(--spacing-sm);

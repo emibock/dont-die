@@ -264,4 +264,113 @@ describe('useTaskStore', () => {
       expect(useTaskStore.getState().expandedTaskId).toBe(null)
     })
   })
+
+  describe('reorderTasks', () => {
+    let task1Id: string
+    let task2Id: string
+    let task3Id: string
+
+    beforeEach(async () => {
+      // Create tasks for reordering tests
+      task1Id = await useTaskStore.getState().addTask({
+        content: 'Task 1',
+        notes: '',
+        links: [],
+        completed: false,
+        completedAt: null,
+        parentId: null,
+        orderIndex: 1.0,
+      })
+
+      task2Id = await useTaskStore.getState().addTask({
+        content: 'Task 2',
+        notes: '',
+        links: [],
+        completed: false,
+        completedAt: null,
+        parentId: null,
+        orderIndex: 2.0,
+      })
+
+      task3Id = await useTaskStore.getState().addTask({
+        content: 'Task 3',
+        notes: '',
+        links: [],
+        completed: false,
+        completedAt: null,
+        parentId: null,
+        orderIndex: 3.0,
+      })
+    })
+
+    it('reorders task between siblings', async () => {
+      // Move task1 between task2 and task3
+      await useTaskStore.getState().reorderTasks(task1Id, null, task2Id, task3Id)
+
+      const task1 = useTaskStore.getState().getTaskById(task1Id)
+      const task2 = useTaskStore.getState().getTaskById(task2Id)
+      const task3 = useTaskStore.getState().getTaskById(task3Id)
+
+      expect(task1!.orderIndex).toBeGreaterThan(task2!.orderIndex)
+      expect(task1!.orderIndex).toBeLessThan(task3!.orderIndex)
+    })
+
+    it('prevents circular reference', async () => {
+      // Create parent-child relationship
+      await useTaskStore.getState().reorderTasks(task2Id, task1Id, null, null)
+
+      // Try to move task1 under task2 (circular)
+      await expect(
+        useTaskStore.getState().reorderTasks(task1Id, task2Id, null, null)
+      ).rejects.toThrow('Cannot move task under itself or its descendants')
+    })
+
+    it('prevents exceeding max depth', async () => {
+      // Create depth 1: task2 under task1
+      await useTaskStore.getState().reorderTasks(task2Id, task1Id, null, null)
+
+      // Create depth 2: task3 under task2
+      await useTaskStore.getState().reorderTasks(task3Id, task2Id, null, null)
+
+      // Create a new task to try moving to depth 3
+      const task4Id = await useTaskStore.getState().addTask({
+        content: 'Task 4',
+        notes: '',
+        links: [],
+        completed: false,
+        completedAt: null,
+        parentId: null,
+        orderIndex: 4.0,
+      })
+
+      // Try to move task4 under task3 (would be depth 3 = index 2, exceeds max)
+      await expect(
+        useTaskStore.getState().reorderTasks(task4Id, task3Id, null, null)
+      ).rejects.toThrow('Maximum nesting depth of 3 levels exceeded')
+    })
+
+    it('moves task to new parent', async () => {
+      await useTaskStore.getState().reorderTasks(task3Id, task1Id, null, null)
+
+      const task3 = useTaskStore.getState().getTaskById(task3Id)
+      expect(task3!.parentId).toBe(task1Id)
+    })
+
+    it('updates orderIndex when moving to end', async () => {
+      // Move task1 to end (after task3)
+      await useTaskStore.getState().reorderTasks(task1Id, null, task3Id, null)
+
+      const task1 = useTaskStore.getState().getTaskById(task1Id)
+      const task3 = useTaskStore.getState().getTaskById(task3Id)
+
+      expect(task1!.orderIndex).toBeGreaterThan(task3!.orderIndex)
+    })
+
+    it('updates task in database', async () => {
+      await useTaskStore.getState().reorderTasks(task1Id, task2Id, null, null)
+
+      const dbTask = await db.tasks.get(task1Id)
+      expect(dbTask?.parentId).toBe(task2Id)
+    })
+  })
 })

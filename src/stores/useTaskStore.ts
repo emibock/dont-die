@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import type { Task, TaskId } from '../types/task.ts'
 import { db } from '../db/schema.ts'
+import { isDescendant, getTaskDepth, calculateNewOrderIndex } from '../utils/taskTree.ts'
 
 interface TaskStore {
   tasks: Task[]
@@ -14,6 +15,7 @@ interface TaskStore {
   updateTask: (id: TaskId, updates: Partial<Task>) => Promise<void>
   deleteTask: (id: TaskId) => Promise<void>
   toggleComplete: (id: TaskId) => Promise<void>
+  reorderTasks: (taskId: TaskId, newParentId: TaskId | null, prevTaskId: TaskId | null, nextTaskId: TaskId | null) => Promise<void>
 
   // UI state
   expandTask: (id: TaskId | null) => void
@@ -90,6 +92,47 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
     }))
 
     // TODO: Award points if completed (will integrate with useGameStore later)
+  },
+
+  // Reorder tasks: move task to new position, update parent and orderIndex
+  reorderTasks: async (taskId, newParentId, prevTaskId, nextTaskId) => {
+    const tasks = get().tasks
+    const task = tasks.find(t => t.id === taskId)
+    if (!task) return
+
+    // Prevent moving task under itself or its descendants
+    if (newParentId && isDescendant(tasks, newParentId, taskId)) {
+      throw new Error('Cannot move task under itself or its descendants')
+    }
+
+    // Check depth constraint (max 3 levels)
+    const newDepth = newParentId ? getTaskDepth(tasks, newParentId) + 1 : 0
+    if (newDepth > 2) {
+      throw new Error('Maximum nesting depth of 3 levels exceeded')
+    }
+
+    // Calculate new orderIndex based on siblings
+    const prevTask = prevTaskId ? tasks.find(t => t.id === prevTaskId) : null
+    const nextTask = nextTaskId ? tasks.find(t => t.id === nextTaskId) : null
+
+    const newOrderIndex = calculateNewOrderIndex(
+      prevTask?.orderIndex ?? null,
+      nextTask?.orderIndex ?? null
+    )
+
+    // Update task with new parent and orderIndex
+    const updates: Partial<Task> = {
+      parentId: newParentId,
+      orderIndex: newOrderIndex,
+      updatedAt: Date.now(),
+    }
+
+    await db.tasks.update(taskId, updates)
+    set((state) => ({
+      tasks: state.tasks.map(t =>
+        t.id === taskId ? { ...t, ...updates } : t
+      ),
+    }))
   },
 
   // Expand/collapse task notepad
