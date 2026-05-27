@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useTaskStore } from './stores/useTaskStore.ts'
 import { useGameStore } from './stores/useGameStore.ts'
 import { TaskList } from './components/TaskList.tsx'
+import { GamificationBar } from './components/GamificationBar.tsx'
 
 function App() {
   const [isHydrated, setIsHydrated] = useState(false)
@@ -35,6 +36,7 @@ function App() {
       </header>
 
       <main className="app-main">
+        <GamificationBar />
         <TaskList />
       </main>
     </div>
