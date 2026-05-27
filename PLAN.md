@@ -294,17 +294,17 @@ interface BackupData {
 
 **Expected commits**: ~8-10 commits for foundation (9 commits completed)
 
-### Phase 2: Basic UI (Week 2) ⬅️ CURRENT
+### Phase 2: Basic UI (Week 2) ✅ COMPLETE
 **Tasks**:
-1. Create `TaskList`, `TaskItem`, `AddTaskButton` components
-2. Implement checkbox to complete tasks
-3. Add basic CSS styling (semantic HTML, CSS variables)
-4. Implement hierarchical rendering (sub-tasks nested)
-5. Add vitest-axe accessibility tests
+1. ✅ Create `TaskList`, `TaskItem`, `AddTaskButton` components
+2. ✅ Implement checkbox to complete tasks
+3. ✅ Add basic CSS styling (semantic HTML, CSS variables)
+4. ✅ Implement hierarchical rendering (sub-tasks nested)
+5. ✅ Add vitest-axe accessibility tests
 
-**Validation**: Can create/check tasks, data reloads on refresh, a11y tests pass
+**Validation**: ✅ Can create/check tasks, data reloads on refresh, a11y tests pass
 
-### Phase 3: Drag-and-Drop (Week 3)
+### Phase 3: Drag-and-Drop (Week 3) ⬅️ CURRENT
 **Tasks**:
 1. Integrate @dnd-kit into `TaskList` and `SubTaskList`
 2. Implement `reorderTasks` with hierarchy constraints
