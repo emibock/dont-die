@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useTaskStore } from './stores/useTaskStore.ts'
 import { useGameStore } from './stores/useGameStore.ts'
+import { TaskList } from './components/TaskList.tsx'
 
 function App() {
   const [isHydrated, setIsHydrated] = useState(false)
@@ -28,8 +29,14 @@ function App() {
 
   return (
     <div className="app">
-      <h1>Don't Die</h1>
-      <p>A gamified to-do list to keep your little guy from drowning in lava.</p>
+      <header className="app-header">
+        <h1>Don't Die</h1>
+        <p className="tagline">A gamified to-do list to keep your little guy from drowning in lava.</p>
+      </header>
+
+      <main className="app-main">
+        <TaskList />
+      </main>
     </div>
   )
 }
