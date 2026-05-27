@@ -1,7 +1,23 @@
 {
   "name": "dont-die-todo",
-  "private": true,
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "description": "A gamified to-do list where you earn points by completing tasks - or your little guy drowns in lava",
+  "author": "Emily Bock",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/emibock/dont-die.git"
+  },
+  "keywords": [
+    "todo",
+    "task-manager",
+    "productivity",
+    "gamification",
+    "react",
+    "typescript",
+    "local-first",
+    "indexeddb"
+  ],
   "type": "module",
   "scripts": {
     "dev": "vite",
