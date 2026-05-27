@@ -13,7 +13,7 @@ interface TaskStore {
   hydrate: () => Promise<void>
 
   // Task CRUD
-  addTask: (task: Omit<Task, 'id' | 'createdAt' | 'updatedAt'>) => Promise<TaskId>
+  addTask: (task: Partial<Omit<Task, 'id' | 'createdAt' | 'updatedAt'>> & Pick<Task, 'content' | 'parentId'>) => Promise<TaskId>
   updateTask: (id: TaskId, updates: Partial<Task>) => Promise<void>
   deleteTask: (id: TaskId) => Promise<void>
   toggleComplete: (id: TaskId) => Promise<void>
@@ -41,11 +41,15 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
   // Add task: persist to IndexedDB first, then update Zustand
   addTask: async (task) => {
     const newTask: Task = {
+      notes: '',
+      links: [],
+      completed: false,
+      completedAt: null,
+      orderIndex: Date.now(), // Use timestamp as default orderIndex for new tasks
       ...task,
       id: crypto.randomUUID(), // Secure random UUID
       createdAt: Date.now(),
       updatedAt: Date.now(),
-      links: [], // Initialize empty links array
     }
 
     await db.tasks.add(newTask)
