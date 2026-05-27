@@ -304,17 +304,17 @@ interface BackupData {
 
 **Validation**: ✅ Can create/check tasks, data reloads on refresh, a11y tests pass
 
-### Phase 3: Drag-and-Drop (Week 3) ⬅️ CURRENT
+### Phase 3: Drag-and-Drop (Week 3) ✅ COMPLETE
 **Tasks**:
-1. Integrate @dnd-kit into `TaskList` and `SubTaskList`
-2. Implement `reorderTasks` with hierarchy constraints
-3. Add drag handles with accessible labels
-4. Test keyboard navigation
-5. Prevent circular references (show error if attempted)
+1. ✅ Integrate @dnd-kit into `TaskList` and `SubTaskList`
+2. ✅ Implement `reorderTasks` with hierarchy constraints
+3. ✅ Add drag handles with accessible labels
+4. ✅ Test keyboard navigation
+5. ✅ Prevent circular references (show error if attempted)
 
-**Validation**: Drag works, keyboard nav functional, hierarchy preserved
+**Validation**: ✅ Drag works, keyboard nav functional, hierarchy preserved
 
-### Phase 4: Notepad Expansion (Week 4)
+### Phase 4: Notepad Expansion (Week 4) ⬅️ CURRENT
 **Tasks**:
 1. Create `TaskItemExpanded` component (textarea)
 2. Add expand/collapse state to store
