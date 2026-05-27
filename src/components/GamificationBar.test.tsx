@@ -127,12 +127,13 @@ describe('GamificationBar', () => {
     expect(screen.getByText('Drowning!')).toBeInTheDocument()
   })
 
-  it('applies correct CSS class to lava guy based on warning level', () => {
+  it('renders lava guy SVG with correct alt text based on warning level', () => {
     useGameStore.setState({ consecutiveZeroDays: 5 })
-    const { container } = render(<GamificationBar />)
+    render(<GamificationBar />)
 
-    const lavaGuy = container.querySelector('.lava-guy-placeholder')
-    expect(lavaGuy).toHaveClass('warning')
+    const lavaGuyImg = screen.getByAltText(/Little guy is warning/i)
+    expect(lavaGuyImg).toBeInTheDocument()
+    expect(lavaGuyImg).toHaveAttribute('src', '/lava-guy.svg')
   })
 
   it('meets accessibility standards', async () => {

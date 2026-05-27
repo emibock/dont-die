@@ -516,28 +516,18 @@ button:disabled {
   justify-content: center;
 }
 
-.lava-guy-placeholder {
-  font-size: 4rem;
-  line-height: 1;
-  transition: transform 0.3s, opacity 0.3s, filter 0.3s;
+.lava-guy {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 }
 
-.lava-guy-placeholder.safe {
-  transform: translateY(0);
-}
-
-.lava-guy-placeholder.warning {
-  animation: wobble 2s ease-in-out infinite;
-}
-
-.lava-guy-placeholder.danger {
-  animation: shake 1s ease-in-out infinite;
-}
-
-.lava-guy-placeholder.drowning {
-  transform: translateY(30px);
-  opacity: 0.3;
-  filter: grayscale(1);
+.lava-guy-svg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 @keyframes wobble {
