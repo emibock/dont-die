@@ -2,6 +2,8 @@ import { create } from 'zustand'
 import type { Task, TaskId } from '../types/task.ts'
 import { db } from '../db/schema.ts'
 import { isDescendant, getTaskDepth, calculateNewOrderIndex } from '../utils/taskTree.ts'
+import { useGameStore } from './useGameStore.ts'
+import { POINTS_PER_TASK } from '../types/game.ts'
 
 interface TaskStore {
   tasks: Task[]
@@ -72,7 +74,7 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
     }))
   },
 
-  // Toggle complete: mark task, move to archive, update timestamps
+  // Toggle complete: mark task, move to archive, update timestamps, award points
   toggleComplete: async (id) => {
     const task = get().tasks.find(t => t.id === id)
     if (!task) return
@@ -91,7 +93,10 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
       ),
     }))
 
-    // TODO: Award points if completed (will integrate with useGameStore later)
+    // Award points when task is completed
+    if (completed) {
+      await useGameStore.getState().addPoints(POINTS_PER_TASK, id)
+    }
   },
 
   // Reorder tasks: move task to new position, update parent and orderIndex

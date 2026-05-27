@@ -1,22 +1,36 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { useTaskStore } from './useTaskStore.ts'
+import { useGameStore } from './useGameStore.ts'
 import { db } from '../db/schema.ts'
+import { POINTS_PER_TASK } from '../types/game.ts'
 
 describe('useTaskStore', () => {
   beforeEach(async () => {
     // Clear the database before each test
     await db.tasks.clear()
+    await db.gamification.clear()
+    await db.dailyProgress.clear()
 
     // Reset the store state
     useTaskStore.setState({
       tasks: [],
       expandedTaskId: null,
     })
+
+    // Initialize game store
+    useGameStore.setState({
+      consecutiveZeroDays: 0,
+      lastActivityDate: null,
+      totalPoints: 0,
+    })
+    await useGameStore.getState().hydrate()
   })
 
   afterEach(async () => {
     // Clean up database after each test
     await db.tasks.clear()
+    await db.gamification.clear()
+    await db.dailyProgress.clear()
   })
 
   describe('addTask', () => {
@@ -173,6 +187,74 @@ describe('useTaskStore', () => {
 
       expect(task?.completed).toBe(false)
       expect(task?.completedAt).toBe(null)
+    })
+
+    it('awards points when task is completed', async () => {
+      const taskId = await useTaskStore.getState().addTask({
+        content: 'Task to complete',
+        notes: '',
+        links: [],
+        completed: false,
+        completedAt: null,
+        parentId: null,
+        orderIndex: 1.0,
+      })
+
+      await useTaskStore.getState().toggleComplete(taskId)
+
+      // Check total points updated
+      const gameState = useGameStore.getState()
+      expect(gameState.totalPoints).toBe(POINTS_PER_TASK)
+
+      // Check daily progress recorded
+      const today = new Date().toISOString().split('T')[0]
+      const todayProgress = await db.dailyProgress.get(today)
+      expect(todayProgress?.pointsEarned).toBe(POINTS_PER_TASK)
+      expect(todayProgress?.tasksCompleted).toContain(taskId)
+
+      // Check consecutive zero days reset
+      expect(gameState.consecutiveZeroDays).toBe(0)
+    })
+
+    it('does not award points when task is uncompleted', async () => {
+      const taskId = await useTaskStore.getState().addTask({
+        content: 'Completed task',
+        notes: '',
+        links: [],
+        completed: true,
+        completedAt: Date.now(),
+        parentId: null,
+        orderIndex: 1.0,
+      })
+
+      // Manually set some initial points
+      await useGameStore.getState().addPoints(5, 'other-task-id')
+
+      await useTaskStore.getState().toggleComplete(taskId)
+
+      // Points should remain unchanged (5 from initial, no deduction)
+      const gameState = useGameStore.getState()
+      expect(gameState.totalPoints).toBe(5)
+    })
+
+    it('persists points to database', async () => {
+      const taskId = await useTaskStore.getState().addTask({
+        content: 'Task to complete',
+        notes: '',
+        links: [],
+        completed: false,
+        completedAt: null,
+        parentId: null,
+        orderIndex: 1.0,
+      })
+
+      await useTaskStore.getState().toggleComplete(taskId)
+
+      // Check gamification state persisted
+      const dbGamification = await db.gamification.get(1)
+      expect(dbGamification?.totalPoints).toBe(POINTS_PER_TASK)
+      expect(dbGamification?.consecutiveZeroDays).toBe(0)
+      expect(dbGamification?.lastActivityDate).toBe(new Date().toISOString().split('T')[0])
     })
   })
 
