@@ -7,8 +7,10 @@ interface SubTaskListProps {
 }
 
 export function SubTaskList({ parentId }: SubTaskListProps) {
-  const getSubTasks = useTaskStore(state => state.getSubTasks)
-  const subTasks = getSubTasks(parentId)
+  const tasks = useTaskStore(state => state.tasks)
+  const subTasks = tasks
+    .filter(t => t.parentId === parentId && !t.completed)
+    .sort((a, b) => a.orderIndex - b.orderIndex)
 
   if (subTasks.length === 0) {
     return null

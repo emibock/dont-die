@@ -4,8 +4,10 @@ import { SubTaskList } from './SubTaskList.tsx'
 import { AddTaskButton } from './AddTaskButton.tsx'
 
 export function TaskList() {
-  const getRootTasks = useTaskStore(state => state.getRootTasks)
-  const rootTasks = getRootTasks()
+  const tasks = useTaskStore(state => state.tasks)
+  const rootTasks = tasks
+    .filter(t => t.parentId === null && !t.completed)
+    .sort((a, b) => a.orderIndex - b.orderIndex)
 
   return (
     <div className="task-list">

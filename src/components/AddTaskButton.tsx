@@ -10,15 +10,15 @@ export function AddTaskButton({ parentId = null }: AddTaskButtonProps) {
   const [isAdding, setIsAdding] = useState(false)
   const [taskContent, setTaskContent] = useState('')
   const addTask = useTaskStore(state => state.addTask)
-  const getRootTasks = useTaskStore(state => state.getRootTasks)
-  const getSubTasks = useTaskStore(state => state.getSubTasks)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!taskContent.trim()) return
 
     // Calculate next orderIndex
-    const siblings = parentId ? getSubTasks(parentId) : getRootTasks()
+    const siblings = parentId
+      ? useTaskStore.getState().getSubTasks(parentId)
+      : useTaskStore.getState().getRootTasks()
     const maxOrderIndex = siblings.length > 0
       ? Math.max(...siblings.map(t => t.orderIndex))
       : 0
