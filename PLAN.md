@@ -314,17 +314,17 @@ interface BackupData {
 
 **Validation**: ✅ Drag works, keyboard nav functional, hierarchy preserved
 
-### Phase 4: Notepad Expansion (Week 4) ⬅️ CURRENT
+### Phase 4: Notepad Expansion (Week 4) ✅ COMPLETE
 **Tasks**:
-1. Create `TaskItemExpanded` component (textarea)
-2. Add expand/collapse state to store
-3. Implement click-to-expand interaction
-4. Extract URLs with regex, render as links
-5. Auto-save notes on blur (debounced)
+1. ✅ Create `TaskItemExpanded` component (textarea)
+2. ✅ Add expand/collapse state to store
+3. ✅ Implement click-to-expand interaction
+4. ✅ Extract URLs with regex, render as links
+5. ✅ Auto-save notes on blur (debounced)
 
-**Validation**: Notes persist, URLs clickable, auto-save works
+**Validation**: ✅ Notes persist, URLs clickable, auto-save works
 
-### Phase 5: Gamification (Week 5)
+### Phase 5: Gamification (Week 5) ⬅️ CURRENT
 **Tasks**:
 1. Update `toggleComplete` to award points → **commit**
 2. Implement daily progress tracking → **commit**
