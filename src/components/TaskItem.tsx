@@ -2,6 +2,7 @@ import { useTaskStore } from '../stores/useTaskStore.ts'
 import type { Task } from '../types/task.ts'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import { TaskItemExpanded } from './TaskItemExpanded.tsx'
 
 interface TaskItemProps {
   task: Task
@@ -10,6 +11,10 @@ interface TaskItemProps {
 export function TaskItem({ task }: TaskItemProps) {
   const toggleComplete = useTaskStore(state => state.toggleComplete)
   const deleteTask = useTaskStore(state => state.deleteTask)
+  const expandedTaskId = useTaskStore(state => state.expandedTaskId)
+  const expandTask = useTaskStore(state => state.expandTask)
+
+  const isExpanded = expandedTaskId === task.id
 
   const {
     attributes,
@@ -36,6 +41,24 @@ export function TaskItem({ task }: TaskItemProps) {
     }
   }
 
+  const handleExpand = () => {
+    expandTask(task.id)
+  }
+
+  const handleCollapse = () => {
+    expandTask(null)
+  }
+
+  // Show expanded view
+  if (isExpanded) {
+    return (
+      <div ref={setNodeRef} style={style} className="task-item-wrapper">
+        <TaskItemExpanded task={task} onCollapse={handleCollapse} />
+      </div>
+    )
+  }
+
+  // Show compact view
   return (
     <div ref={setNodeRef} style={style} className="task-item">
       <button
@@ -52,7 +75,18 @@ export function TaskItem({ task }: TaskItemProps) {
         onChange={handleToggle}
         aria-label={`Mark "${task.content}" as ${task.completed ? 'incomplete' : 'complete'}`}
       />
-      <span className={task.completed ? 'task-content completed' : 'task-content'}>
+      <span
+        className={task.completed ? 'task-content completed' : 'task-content'}
+        onClick={handleExpand}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            handleExpand()
+          }
+        }}
+      >
         {task.content}
       </span>
       <button
