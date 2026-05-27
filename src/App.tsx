@@ -4,6 +4,7 @@ import { useGameStore } from './stores/useGameStore.ts'
 import { TaskList } from './components/TaskList.tsx'
 import { GamificationBar } from './components/GamificationBar.tsx'
 import { ArchiveView } from './components/ArchiveView.tsx'
+import { ExportImport } from './components/ExportImport.tsx'
 
 function App() {
   const [isHydrated, setIsHydrated] = useState(false)
@@ -53,6 +54,7 @@ function App() {
         <GamificationBar />
         <TaskList />
         <ArchiveView />
+        <ExportImport />
       </main>
     </div>
   )
