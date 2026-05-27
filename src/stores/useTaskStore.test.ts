@@ -24,6 +24,7 @@ describe('useTaskStore', () => {
       const taskId = await useTaskStore.getState().addTask({
         content: 'Test task',
         notes: '',
+        links: [],
         completed: false,
         completedAt: null,
         parentId: null,
@@ -51,6 +52,7 @@ describe('useTaskStore', () => {
       const parentId = await useTaskStore.getState().addTask({
         content: 'Parent task',
         notes: '',
+        links: [],
         completed: false,
         completedAt: null,
         parentId: null,
@@ -60,6 +62,7 @@ describe('useTaskStore', () => {
       const childId = await useTaskStore.getState().addTask({
         content: 'Child task',
         notes: '',
+        links: [],
         completed: false,
         completedAt: null,
         parentId,
@@ -78,6 +81,7 @@ describe('useTaskStore', () => {
       const taskId = await useTaskStore.getState().addTask({
         content: 'Original content',
         notes: '',
+        links: [],
         completed: false,
         completedAt: null,
         parentId: null,
@@ -107,6 +111,7 @@ describe('useTaskStore', () => {
       const taskId = await useTaskStore.getState().addTask({
         content: 'Task to delete',
         notes: '',
+        links: [],
         completed: false,
         completedAt: null,
         parentId: null,
@@ -129,6 +134,7 @@ describe('useTaskStore', () => {
       const taskId = await useTaskStore.getState().addTask({
         content: 'Task to complete',
         notes: '',
+        links: [],
         completed: false,
         completedAt: null,
         parentId: null,
@@ -153,6 +159,7 @@ describe('useTaskStore', () => {
       const taskId = await useTaskStore.getState().addTask({
         content: 'Completed task',
         notes: '',
+        links: [],
         completed: true,
         completedAt: Date.now(),
         parentId: null,
@@ -175,15 +182,17 @@ describe('useTaskStore', () => {
       const root1 = await useTaskStore.getState().addTask({
         content: 'Root 1',
         notes: '',
+        links: [],
         completed: false,
         completedAt: null,
         parentId: null,
         orderIndex: 1.0,
       })
 
-      const root2 = await useTaskStore.getState().addTask({
+      await useTaskStore.getState().addTask({
         content: 'Root 2',
         notes: '',
+        links: [],
         completed: false,
         completedAt: null,
         parentId: null,
@@ -193,6 +202,7 @@ describe('useTaskStore', () => {
       await useTaskStore.getState().addTask({
         content: 'Child 1 of Root 1',
         notes: '',
+        links: [],
         completed: false,
         completedAt: null,
         parentId: root1,
@@ -202,6 +212,7 @@ describe('useTaskStore', () => {
       await useTaskStore.getState().addTask({
         content: 'Child 2 of Root 1',
         notes: '',
+        links: [],
         completed: false,
         completedAt: null,
         parentId: root1,

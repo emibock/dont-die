@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import type { TaskId } from '../types/task.ts'
 import type { GamificationState, LavaState } from '../types/game.ts'
-import { POINTS_PER_TASK, DAILY_GOAL, LAVA_COUNTDOWN_DAYS } from '../types/game.ts'
+import { LAVA_COUNTDOWN_DAYS } from '../types/game.ts'
 import { db } from '../db/schema.ts'
 
 interface GameStore extends GamificationState {
