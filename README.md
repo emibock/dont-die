@@ -54,6 +54,25 @@ npm run preview  # Preview the production build
 
 ---
 
+
+## Screenshots
+
+### Main Interface
+![Main Interface - Light Mode](screenshots/main-interface-light.png)
+![Main Interface - Dark Mode](screenshots/main-interface-dark.png)
+
+### Features
+![Expandable Notepad](screenshots/notepad-expanded.png)
+![Archive View](screenshots/archive-view.png)
+
+### Gamification - Lava Guy States
+![Safe](screenshots/lava-guy-safe.png) ![Warning](screenshots/lava-guy-warning.png) ![Danger](screenshots/lava-guy-danger.png) ![Drowning](screenshots/lava-guy-drowning.png)
+
+## Demo
+
+![Demo](screenshots/dont-die-demo.gif)
+
+
 ## 📖 How to Use
 
 ### Adding Tasks
