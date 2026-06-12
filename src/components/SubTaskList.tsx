@@ -1,17 +1,15 @@
 import { useTaskStore } from '../stores/useTaskStore.ts'
 import type { TaskId } from '../types/task.ts'
 import { TaskItem } from './TaskItem.tsx'
-import { AddTaskButton } from './AddTaskButton.tsx'
 import { DndContext, closestCenter } from '@dnd-kit/core'
 import type { DragEndEvent } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 
 interface SubTaskListProps {
   parentId: TaskId
-  depth?: number // Track nesting depth (0 = top-level task, 1 = first-level subtask)
 }
 
-export function SubTaskList({ parentId, depth = 0 }: SubTaskListProps) {
+export function SubTaskList({ parentId }: SubTaskListProps) {
   const tasks = useTaskStore(state => state.tasks)
   const reorderTasks = useTaskStore(state => state.reorderTasks)
   const subTasks = tasks

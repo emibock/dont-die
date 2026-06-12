@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import type { Task, TaskId } from '../types/task.ts'
 import { db } from '../db/schema.ts'
-import { isDescendant, getTaskDepth, calculateNewOrderIndex } from '../utils/taskTree.ts'
+import { isDescendant, calculateNewOrderIndex } from '../utils/taskTree.ts'
 import { useGameStore } from './useGameStore.ts'
 import { POINTS_PER_TASK } from '../types/game.ts'
 
