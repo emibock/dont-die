@@ -34,12 +34,11 @@ A gamified to-do list app where you earn points by completing tasks — or your 
 
 Visit **[https://emibock.github.io/dont-die/](https://emibock.github.io/dont-die/)** in any modern browser.
 
-**Install as an App:**
-- **Desktop (Chrome/Edge)**: Click the install icon (➕) in the address bar
-- **Mobile (iOS Safari)**: Tap Share → Add to Home Screen
-- **Mobile (Android Chrome)**: Tap the menu → Install app
+**Install as an App (Mobile Only):**
+- **iOS Safari**: Tap Share → Add to Home Screen
+- **Android Chrome**: Tap the three dots menu (⋮) → Add to Home screen or Install app
 
-The app works offline once installed and stores all data locally on your device.
+The app works offline after your first visit and stores all data locally in your browser.
 
 ### Option 2: Run Locally
 
