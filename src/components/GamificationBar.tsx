@@ -6,11 +6,12 @@ import type { LavaWarningLevel } from '../types/game.ts'
 
 // Helper function to get the correct character image based on state
 const getLavaGuyImage = (warningLevel: LavaWarningLevel): string => {
+  const base = import.meta.env.BASE_URL
   switch (warningLevel) {
-    case 'safe': return '/lava-guy-safe.svg'
-    case 'warning': return '/lava-guy-warning.svg'
-    case 'danger': return '/lava-guy-danger.svg'
-    case 'drowning': return '/lava-guy-dead.svg'
+    case 'safe': return `${base}lava-guy-safe.svg`
+    case 'warning': return `${base}lava-guy-warning.svg`
+    case 'danger': return `${base}lava-guy-danger.svg`
+    case 'drowning': return `${base}lava-guy-dead.svg`
   }
 }
 
@@ -138,7 +139,7 @@ export function GamificationBar() {
               height: `${getLavaHeight(lavaState.warningLevel)}%`
             }}
           >
-            <img src="/lava.svg" alt="" className="lava-image" />
+            <img src={`${import.meta.env.BASE_URL}lava.svg`} alt="" className="lava-image" />
           </div>
 
           {/* Character on top of lava */}
