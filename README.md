@@ -100,7 +100,8 @@ Drowning
 1. Click **"Add task"** at the bottom of the task list
 2. Type your task name and press **Enter** or click **"Add"**
 3. Click on a task to expand its notepad and add detailed notes
-4. Add sub-tasks by clicking **"Add sub-task"** under any task
+4. Add sub-tasks by clicking **"Add sub-task"** under any **top-level task**
+   - **Note**: Sub-tasks can only be 1 level deep (sub-tasks cannot have their own sub-tasks)
 
 ### Earning Points
 
