@@ -8,7 +8,7 @@ A gamified to-do list app where you earn points by completing tasks — or your 
 
 ## ✨ Features
 
-- **Hierarchical Tasks**: Organize tasks with unlimited sub-tasks (up to 3 levels deep)
+- **Hierarchical Tasks**: Organize tasks with sub-tasks (1 level deep)
 - **Drag-and-Drop Reordering**: Intuitive task organization with keyboard support
 - **Expandable Notepads**: Click any task to add detailed notes with automatic URL extraction
 - **Gamification Mechanics**: 
@@ -16,6 +16,8 @@ A gamified to-do list app where you earn points by completing tasks — or your 
   - Daily goal: 5 points
   - Miss a day? Your lava guy gets closer to drowning
   - 10 consecutive zero-point days = Game Over
+  - **Animated Lava**: Watch the lava rise as danger increases
+  - **State-Specific Character**: Your little guy's expression changes based on danger level
 - **Dark Mode**: Auto, light, or dark themes with system preference detection
 - **Backup & Restore**: Export/import your data as JSON
 - **Fully Local**: All data stored in your browser's IndexedDB (no cloud, no tracking)
@@ -110,10 +112,15 @@ Drowning
 
 Your "lava guy" status depends on consecutive zero-point days:
 
-- **0-3 days**: ✅ Safe (guy stands upright)
-- **4-6 days**: ⚠️ Warning (guy wobbles nervously)
-- **7-9 days**: 🚨 Danger (guy panics with rapid shaking)
-- **10+ days**: 💀 Drowning (guy submerged in lava, game over)
+- **0-3 days**: ✅ **Safe** - Happy character, no lava visible
+- **4-6 days**: ⚠️ **Warning** - Concerned expression, lava at 30%, gentle wobbling
+- **7-9 days**: 🚨 **Danger** - Scared expression, lava at 60%, rapid shaking
+- **10+ days**: 💀 **Drowning** - Defeated expression, lava at 95%, character sinking and faded
+
+Each state features:
+- **Custom character design** reflecting emotional state
+- **Animated lava background** that rises progressively
+- **Motion animations** (wobble, shake, sink) for visual feedback
 
 **Recovery**: Complete tasks to reset your countdown and save your guy!
 
@@ -136,9 +143,16 @@ Your "lava guy" status depends on consecutive zero-point days:
 
 ### Archive
 
-- Completed tasks are automatically moved to the **Archive** section
+- Completed tasks (including subtasks) are automatically moved to the **Archive** section
 - Click **"Completed Tasks"** to expand and view your accomplishments
 - Archived tasks still count toward your total points
+
+### Testing Lava States (Development)
+
+A test harness is available in development mode:
+1. Click the **"🧪 Test Lava States"** button in the bottom-right corner
+2. Switch between all four states (Safe, Warning, Danger, Drowning) instantly
+3. Verify character expressions, lava heights, and animations
 
 ---
 
@@ -170,7 +184,7 @@ npm run test:watch
 npm run test:coverage
 ```
 
-**Current test coverage**: 164 tests across 14 test files, 80%+ coverage
+**Current test coverage**: 173 tests across 15 test files, 80%+ coverage
 
 ---
 
@@ -202,7 +216,11 @@ dont-die/
 │       ├── task.ts          # Task interfaces
 │       └── game.ts          # Gamification interfaces
 ├── public/
-│   └── lava-guy.svg         # SVG character
+│   ├── lava-guy-safe.svg    # Happy character
+│   ├── lava-guy-warning.svg # Concerned character
+│   ├── lava-guy-danger.svg  # Scared character
+│   ├── lava-guy-dead.svg    # Defeated character
+│   └── lava.svg             # Animated lava background
 ├── vite.config.ts
 ├── tsconfig.json
 ├── package.json
