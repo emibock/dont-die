@@ -8,9 +8,10 @@ import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 
 interface SubTaskListProps {
   parentId: TaskId
+  depth?: number // Track nesting depth (0 = top-level task, 1 = first-level subtask)
 }
 
-export function SubTaskList({ parentId }: SubTaskListProps) {
+export function SubTaskList({ parentId, depth = 0 }: SubTaskListProps) {
   const tasks = useTaskStore(state => state.tasks)
   const reorderTasks = useTaskStore(state => state.reorderTasks)
   const subTasks = tasks
@@ -63,9 +64,6 @@ export function SubTaskList({ parentId }: SubTaskListProps) {
           {subTasks.map(task => (
             <div key={task.id} className="subtask-item">
               <TaskItem task={task} />
-              {/* Recursive: render sub-tasks of this sub-task */}
-              <SubTaskList parentId={task.id} />
-              <AddTaskButton parentId={task.id} />
             </div>
           ))}
         </div>

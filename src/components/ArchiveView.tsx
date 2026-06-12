@@ -6,7 +6,7 @@ export function ArchiveView() {
   const [isExpanded, setIsExpanded] = useState(false)
   const tasks = useTaskStore(state => state.tasks)
 
-  const completedTasks = tasks.filter(task => task.completed && task.parentId === null)
+  const completedTasks = tasks.filter(task => task.completed)
 
   if (completedTasks.length === 0) {
     return null

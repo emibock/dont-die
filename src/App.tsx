@@ -6,6 +6,7 @@ import { GamificationBar } from './components/GamificationBar.tsx'
 import { ArchiveView } from './components/ArchiveView.tsx'
 import { ExportImport } from './components/ExportImport.tsx'
 import { DarkModeToggle } from './components/DarkModeToggle.tsx'
+import { LavaTestHarness } from './components/LavaTestHarness.tsx'
 
 function App() {
   const [isHydrated, setIsHydrated] = useState(false)
@@ -47,6 +48,7 @@ function App() {
   return (
     <div className="app">
       <DarkModeToggle />
+      <LavaTestHarness />
       <header className="app-header">
         <h1>Don't Die</h1>
         <p className="tagline">A gamified to-do list to keep your little guy from drowning in lava.</p>

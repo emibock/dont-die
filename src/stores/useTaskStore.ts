@@ -40,6 +40,14 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
 
   // Add task: persist to IndexedDB first, then update Zustand
   addTask: async (task) => {
+    // Validate: prevent creating subtasks under subtasks (only one level of nesting allowed)
+    if (task.parentId) {
+      const parentTask = get().tasks.find(t => t.id === task.parentId)
+      if (parentTask && parentTask.parentId !== null) {
+        throw new Error('Cannot create a subtask under another subtask. Only top-level tasks can have subtasks.')
+      }
+    }
+
     const newTask: Task = {
       notes: '',
       links: [],
@@ -114,10 +122,12 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
       throw new Error('Cannot move task under itself or its descendants')
     }
 
-    // Check depth constraint (max 3 levels)
-    const newDepth = newParentId ? getTaskDepth(tasks, newParentId) + 1 : 0
-    if (newDepth > 2) {
-      throw new Error('Maximum nesting depth of 3 levels exceeded')
+    // Check depth constraint: only allow one level of nesting (subtasks under top-level tasks)
+    if (newParentId) {
+      const newParent = tasks.find(t => t.id === newParentId)
+      if (newParent && newParent.parentId !== null) {
+        throw new Error('Cannot move task under a subtask. Only top-level tasks can have subtasks.')
+      }
     }
 
     // Calculate new orderIndex based on siblings

@@ -87,7 +87,7 @@ describe('SubTaskList', () => {
     expect(screen.queryByText('Sub-task of parent 2')).not.toBeInTheDocument()
   })
 
-  it('renders add sub-task button for each sub-task', async () => {
+  it('does not render add sub-task button within subtask list', async () => {
     const parentId = await useTaskStore.getState().addTask({
       content: 'Parent task',
       parentId: null,
@@ -100,10 +100,12 @@ describe('SubTaskList', () => {
 
     render(<SubTaskList parentId={parentId} />)
 
-    expect(screen.getByRole('button', { name: /Add sub-task/i })).toBeInTheDocument()
+    // SubTaskList should not render any add sub-task buttons
+    // (AddTaskButton is rendered by TaskList.tsx for top-level tasks)
+    expect(screen.queryByRole('button', { name: /Add sub-task/i })).not.toBeInTheDocument()
   })
 
-  it('renders nested sub-tasks (recursive)', async () => {
+  it('prevents creating nested sub-tasks beyond first level', async () => {
     const parent = await useTaskStore.getState().addTask({
       content: 'Parent',
       parentId: null,
@@ -114,15 +116,20 @@ describe('SubTaskList', () => {
       parentId: parent,
     })
 
-    await useTaskStore.getState().addTask({
-      content: 'Sub-sub-task',
-      parentId: subTask,
-    })
+    // Attempting to create a sub-sub-task should throw an error
+    await expect(
+      useTaskStore.getState().addTask({
+        content: 'Sub-sub-task',
+        parentId: subTask,
+      })
+    ).rejects.toThrow('Cannot create a subtask under another subtask. Only top-level tasks can have subtasks.')
 
     render(<SubTaskList parentId={parent} />)
 
+    // First-level subtask should be visible
     expect(screen.getByText('Sub-task')).toBeInTheDocument()
-    expect(screen.getByText('Sub-sub-task')).toBeInTheDocument()
+    // Sub-sub-task was never created, so it won't be in the document
+    expect(screen.queryByText('Sub-sub-task')).not.toBeInTheDocument()
   })
 
   it('renders sub-tasks in order by orderIndex', async () => {
@@ -182,24 +189,4 @@ describe('SubTaskList', () => {
     expect(results).toHaveNoViolations()
   })
 
-  it('meets accessibility standards with nested sub-tasks', async () => {
-    const parent = await useTaskStore.getState().addTask({
-      content: 'Parent',
-      parentId: null,
-    })
-
-    const subTask = await useTaskStore.getState().addTask({
-      content: 'Sub-task',
-      parentId: parent,
-    })
-
-    await useTaskStore.getState().addTask({
-      content: 'Sub-sub-task',
-      parentId: subTask,
-    })
-
-    const { container } = render(<SubTaskList parentId={parent} />)
-    const results = await axe(container)
-    expect(results).toHaveNoViolations()
-  })
 })

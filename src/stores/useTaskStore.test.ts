@@ -88,6 +88,28 @@ describe('useTaskStore', () => {
 
       expect(childTask?.parentId).toBe(parentId)
     })
+
+    it('prevents creating a subtask under another subtask', async () => {
+      // Create a top-level task
+      const parentId = await useTaskStore.getState().addTask({
+        content: 'Parent task',
+        parentId: null,
+      })
+
+      // Create a first-level subtask (this should succeed)
+      const subtaskId = await useTaskStore.getState().addTask({
+        content: 'First-level subtask',
+        parentId,
+      })
+
+      // Try to create a second-level subtask (this should fail)
+      await expect(
+        useTaskStore.getState().addTask({
+          content: 'Second-level subtask',
+          parentId: subtaskId,
+        })
+      ).rejects.toThrow('Cannot create a subtask under another subtask. Only top-level tasks can have subtasks.')
+    })
   })
 
   describe('updateTask', () => {
@@ -408,27 +430,13 @@ describe('useTaskStore', () => {
     })
 
     it('prevents exceeding max depth', async () => {
-      // Create depth 1: task2 under task1
+      // Create depth 1: task2 under task1 (this is allowed)
       await useTaskStore.getState().reorderTasks(task2Id, task1Id, null, null)
 
-      // Create depth 2: task3 under task2
-      await useTaskStore.getState().reorderTasks(task3Id, task2Id, null, null)
-
-      // Create a new task to try moving to depth 3
-      const task4Id = await useTaskStore.getState().addTask({
-        content: 'Task 4',
-        notes: '',
-        links: [],
-        completed: false,
-        completedAt: null,
-        parentId: null,
-        orderIndex: 4.0,
-      })
-
-      // Try to move task4 under task3 (would be depth 3 = index 2, exceeds max)
+      // Try to move task3 under task2 (would create a subtask under a subtask, which is not allowed)
       await expect(
-        useTaskStore.getState().reorderTasks(task4Id, task3Id, null, null)
-      ).rejects.toThrow('Maximum nesting depth of 3 levels exceeded')
+        useTaskStore.getState().reorderTasks(task3Id, task2Id, null, null)
+      ).rejects.toThrow('Cannot move task under a subtask. Only top-level tasks can have subtasks.')
     })
 
     it('moves task to new parent', async () => {

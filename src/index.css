@@ -529,6 +529,43 @@ button:disabled {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative; /* Enable absolute positioning for children */
+  overflow: hidden; /* Clip lava that rises beyond container */
+  background: linear-gradient(to bottom, #f0f0f0 0%, #e0e0e0 100%); /* Light background */
+  border-radius: 8px;
+}
+
+/* Lava background layer */
+.lava-background {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  transition: height 0.8s ease-in-out; /* Smooth lava rise animation */
+  overflow: hidden;
+  z-index: 1; /* Behind character */
+}
+
+.lava-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  object-position: bottom; /* Show bottom part of lava image */
+  animation: lavaFlow 3s linear infinite; /* Gentle flowing animation */
+}
+
+/* Lava flowing animation */
+@keyframes lavaFlow {
+  0% {
+    transform: translateX(0) scale(1.1);
+  }
+  50% {
+    transform: translateX(-5px) scale(1.15);
+  }
+  100% {
+    transform: translateX(0) scale(1.1);
+  }
 }
 
 .lava-guy {
@@ -537,12 +574,15 @@ button:disabled {
   justify-content: center;
   width: 100%;
   height: 100%;
+  position: relative; /* Above lava */
+  z-index: 2; /* In front of lava */
 }
 
 .lava-guy-svg {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2)); /* Add subtle shadow */
 }
 
 @keyframes wobble {

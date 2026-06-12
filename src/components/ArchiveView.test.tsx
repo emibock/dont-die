@@ -117,7 +117,7 @@ describe('ArchiveView', () => {
     expect(screen.queryByText('Completed task')).not.toBeInTheDocument()
   })
 
-  it('only shows root-level completed tasks', async () => {
+  it('shows all completed tasks including subtasks', async () => {
     const parentId = await useTaskStore.getState().addTask({
       content: 'Parent task',
       parentId: null,
@@ -133,11 +133,11 @@ describe('ArchiveView', () => {
     const user = userEvent.setup()
     render(<ArchiveView />)
 
-    const button = screen.getByRole('button', { name: /Completed Tasks \(1\)/i })
+    const button = screen.getByRole('button', { name: /Completed Tasks \(2\)/i })
     await user.click(button)
 
     expect(screen.getByText('Parent task')).toBeInTheDocument()
-    // Child task should not be directly visible in archive, but may be nested under parent
+    expect(screen.getByText('Child task')).toBeInTheDocument()
   })
 
   it('updates count when tasks are completed', async () => {

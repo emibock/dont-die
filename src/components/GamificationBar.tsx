@@ -4,6 +4,26 @@ import { useGameStore } from '../stores/useGameStore.ts'
 import { DAILY_GOAL } from '../types/game.ts'
 import type { LavaWarningLevel } from '../types/game.ts'
 
+// Helper function to get the correct character image based on state
+const getLavaGuyImage = (warningLevel: LavaWarningLevel): string => {
+  switch (warningLevel) {
+    case 'safe': return '/lava-guy-safe.svg'
+    case 'warning': return '/lava-guy-warning.svg'
+    case 'danger': return '/lava-guy-danger.svg'
+    case 'drowning': return '/lava-guy-dead.svg'
+  }
+}
+
+// Helper function to calculate lava height percentage
+const getLavaHeight = (warningLevel: LavaWarningLevel): number => {
+  switch (warningLevel) {
+    case 'safe': return 0      // No lava visible
+    case 'warning': return 30  // Lava at bottom
+    case 'danger': return 60   // Lava rising
+    case 'drowning': return 95 // Lava at top (character submerged)
+  }
+}
+
 // Animation variants for lava guy based on warning level
 const lavaGuyVariants: Record<LavaWarningLevel, any> = {
   safe: {
@@ -84,7 +104,8 @@ export function GamificationBar() {
         <div className="stat">
           <span className="stat-label">Status</span>
           <span className={`stat-value status-${lavaState.warningLevel}`}>
-            {lavaState.isDrowning ? 'Drowning!' : goalMet ? 'Goal Met!' : 'In Progress'}
+            {lavaState.warningLevel.charAt(0).toUpperCase() + lavaState.warningLevel.slice(1)}
+            {lavaState.isDrowning && '!'}
           </span>
         </div>
       </div>
@@ -110,13 +131,24 @@ export function GamificationBar() {
 
       <div className="lava-section">
         <div className="lava-guy-container">
+          {/* Lava background - rises based on danger level */}
+          <div
+            className="lava-background"
+            style={{
+              height: `${getLavaHeight(lavaState.warningLevel)}%`
+            }}
+          >
+            <img src="/lava.svg" alt="" className="lava-image" />
+          </div>
+
+          {/* Character on top of lava */}
           <motion.div
             variants={lavaGuyVariants}
             animate={lavaState.warningLevel}
             className="lava-guy"
           >
             <img
-              src="/lava-guy.svg"
+              src={getLavaGuyImage(lavaState.warningLevel)}
               alt={`Little guy is ${lavaState.warningLevel}`}
               className="lava-guy-svg"
             />

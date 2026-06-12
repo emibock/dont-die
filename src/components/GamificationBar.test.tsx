@@ -133,7 +133,7 @@ describe('GamificationBar', () => {
 
     const lavaGuyImg = screen.getByAltText(/Little guy is warning/i)
     expect(lavaGuyImg).toBeInTheDocument()
-    expect(lavaGuyImg).toHaveAttribute('src', '/lava-guy.svg')
+    expect(lavaGuyImg).toHaveAttribute('src', '/lava-guy-warning.svg')
   })
 
   it('meets accessibility standards', async () => {
