@@ -2,7 +2,7 @@
   "name": "Don't Die - Gamified To-Do List",
   "short_name": "Don't Die",
   "description": "A gamified to-do list where you earn points by completing tasks — or your little guy drowns in lava.",
-  "start_url": "/",
+  "start_url": "/dont-die/",
   "display": "standalone",
   "background_color": "#1a1a1a",
   "theme_color": "#ff6b35",
