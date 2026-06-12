@@ -126,6 +126,9 @@ describe('useTaskStore', () => {
 
       const originalUpdatedAt = useTaskStore.getState().tasks[0].updatedAt
 
+      // Wait 1ms to ensure timestamp changes
+      await new Promise(resolve => setTimeout(resolve, 1))
+
       await useTaskStore.getState().updateTask(taskId, {
         content: 'Updated content',
       })
