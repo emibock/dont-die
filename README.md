@@ -6,6 +6,8 @@ A gamified to-do list app where you earn points by completing tasks — or your 
 
 🌐 **[Try it now](https://emibock.github.io/dont-die/)** - Install as an app on any device!
 
+**DISCLAIMER:** This app was created entirely with AI as an exercise in learning to vibe-code. I have no claim to glory, only blame :) 
+
 ---
 
 ## ✨ Features
@@ -37,6 +39,7 @@ Visit **[https://emibock.github.io/dont-die/](https://emibock.github.io/dont-die
 **Install as an App (Mobile Only):**
 - **iOS Safari**: Tap Share → Add to Home Screen
 - **Android Chrome**: Tap the three dots menu (⋮) → Add to Home screen or Install app
+- **Android Firefox**: Tap the three dots menu (⋮) → More → Add app to Home screen
 
 The app works offline after your first visit and stores all data locally in your browser.
 
