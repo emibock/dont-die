@@ -7,6 +7,7 @@ import { ArchiveView } from './components/ArchiveView.tsx'
 import { ExportImport } from './components/ExportImport.tsx'
 import { DarkModeToggle } from './components/DarkModeToggle.tsx'
 import { LavaTestHarness } from './components/LavaTestHarness.tsx'
+import { InstallPrompt } from './components/InstallPrompt.tsx'
 
 function App() {
   const [isHydrated, setIsHydrated] = useState(false)
@@ -47,6 +48,7 @@ function App() {
 
   return (
     <div className="app">
+      <InstallPrompt />
       <DarkModeToggle />
       <LavaTestHarness />
       <header className="app-header">
