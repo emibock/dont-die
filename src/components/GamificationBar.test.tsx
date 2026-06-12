@@ -77,7 +77,8 @@ describe('GamificationBar', () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Daily goal achieved!/i)).toBeInTheDocument()
-      expect(screen.getByText('Goal Met!')).toBeInTheDocument()
+      // Status now shows lava warning level instead of "Goal Met!"
+      expect(screen.getByText('Safe')).toBeInTheDocument()
     })
   })
 
