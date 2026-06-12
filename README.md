@@ -2,7 +2,9 @@
 
 A gamified to-do list app where you earn points by completing tasks — or your little guy drowns in lava.
 
-**Local-first. No hosting. No backend. Just you, your tasks, and rising lava.**
+**Local-first. No backend. Just you, your tasks, and rising lava.**
+
+🌐 **[Try it now](https://emibock.github.io/dont-die/)** - Install as an app on any device!
 
 ---
 
@@ -22,10 +24,24 @@ A gamified to-do list app where you earn points by completing tasks — or your 
 - **Backup & Restore**: Export/import your data as JSON
 - **Fully Local**: All data stored in your browser's IndexedDB (no cloud, no tracking)
 - **Accessible**: WCAG AA compliant with full keyboard navigation and screen reader support
+- **Progressive Web App (PWA)**: Install on any device for offline access and app-like experience
 
 ---
 
 ## 🚀 Quick Start
+
+### Option 1: Use the Hosted App (Recommended)
+
+Visit **[https://emibock.github.io/dont-die/](https://emibock.github.io/dont-die/)** in any modern browser.
+
+**Install as an App:**
+- **Desktop (Chrome/Edge)**: Click the install icon (➕) in the address bar
+- **Mobile (iOS Safari)**: Tap Share → Add to Home Screen
+- **Mobile (Android Chrome)**: Tap the menu → Install app
+
+The app works offline once installed and stores all data locally on your device.
+
+### Option 2: Run Locally
 
 ### Prerequisites
 - **Node.js 22+** (or use nvm: `nvm use`)
@@ -52,6 +68,24 @@ The app will open at `http://localhost:5173`
 ```bash
 npm run build
 npm run preview  # Preview the production build
+```
+
+### Option 3: Deploy Your Own Instance
+
+Fork this repository and enable GitHub Pages to host your own version:
+
+1. **Fork the repository** on GitHub
+2. **Enable GitHub Pages**:
+   - Go to Settings → Pages
+   - Source: "GitHub Actions"
+3. **Push to main** - The app automatically deploys via GitHub Actions
+4. **Access your deployment** at `https://YOUR-USERNAME.github.io/dont-die/`
+
+The deployment workflow (`.github/workflows/deploy.yml`) runs automatically on every push to `main`.
+
+**Manual deployment trigger:**
+```bash
+gh workflow run deploy.yml
 ```
 
 ---
@@ -169,6 +203,8 @@ A test harness is available in development mode:
 - **[Vitest](https://vitest.dev/)**: Fast unit testing
 - **[@testing-library/react](https://testing-library.com/react)**: Component testing
 - **[vitest-axe](https://github.com/chaance/vitest-axe)**: Accessibility testing
+- **PWA**: Service Worker for offline support, Web App Manifest for installability
+- **GitHub Pages**: Automated deployment via GitHub Actions
 
 ---
 
@@ -228,6 +264,29 @@ dont-die/
 ├── LICENSE                   # MIT License
 └── README.md                 # This file
 ```
+
+---
+
+## 🚢 Deployment
+
+The app automatically deploys to GitHub Pages when changes are pushed to the `main` branch.
+
+**Deployment Pipeline:**
+1. Push to `main` triggers GitHub Actions workflow
+2. Build step: `npm ci` → `npm run build` (outputs to `dist/`)
+3. Deploy step: Publishes `dist/` to GitHub Pages
+4. Live site updates at https://emibock.github.io/dont-die/
+
+**Manual Deployment:**
+```bash
+# Trigger workflow manually via GitHub CLI
+gh workflow run deploy.yml
+```
+
+**Configuration Files:**
+- `.github/workflows/deploy.yml` - CI/CD workflow
+- `vite.config.ts` - Sets `base: '/dont-die/'` for GitHub Pages routing
+- `public/manifest.json` - PWA manifest with `start_url: '/dont-die/'`
 
 ---
 
